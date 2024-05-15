@@ -14,6 +14,20 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+
+    Product_Cart: [
+        { 
+            Product_Id: {
+            type: String,
+            required: true,
+        }, 
+        status: {
+            type: String,
+            required: true,
+        } 
+    }
+       
+      ],
     Image: {
         type: String,
         required: true,

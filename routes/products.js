@@ -1,11 +1,10 @@
 const express = require('express');
 const products = express.Router();
-products.get('/medicine',(req,res)=>{
-    res.send('Hello World');
-})
-products.post('/medicine',(req,res)=>{
-    res.send('Hello World');
-})
+const {available,show} = require('../controllers/product');
+
+
+products.get('/medicine',show)
+products.post('/medicine',available)
 products.get('/medicine/:id',(req,res)=>{
     const id = req.params.id
     res.send(`Product Id is ${id}`);
