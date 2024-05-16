@@ -5,16 +5,20 @@ const { setUser } = require("../service/auth");
 const cloudinary = require('cloudinary').v2;
 
 
+
 async function handleUserSignup(req, res) {
   const { name, email, password } = req.body;
-  const Image = "hello"
+  let Image = "https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg";
   let token;
+  // console.log(name,email,password,Image);
+  
   try {
     const user = await User.create({
       name,
       email,
       password,
       Image,
+      
     });
     token = setUser(user);
   } catch (error) {
@@ -40,7 +44,7 @@ async function handleUserLogin(req, res) {
 
 async function handleUsercart(req, res) {
   const { user_Id, Product_Id, Status } = req.body;
-  console.log(user_Id,Product_Id,Status)
+  // console.log(user_Id,Product_Id,Status)
   const user = await User.findByIdAndUpdate( { _id: user_Id },
   { $push: { Product_Cart: { Product_Id: `${Product_Id}`, status: `${Status}` } } });
   console.log(user);
@@ -87,14 +91,53 @@ async function upload_pic(req,res){
   
   
 }
+async function handleUpdateProfile(req, res) {
+  const id = req.params.id;
+  const { name, email, password, address,phone } = req.body;
+  let Image = req.files.file;
+  let Image_;
+  let token;
+  // console.log(req.body,Image)
+  // console.log(id);
+  try {
+    // let Image;
+    
+    
+    if (Image) {
+      const result = await cloudinary.uploader.upload(Image.tempFilePath,(err,result)=>{
+        // console.log(result.secure_url);
+      });
+      Image_ = result.secure_url;
+    }
+    const user = await User.findByIdAndUpdate(
+      { _id: id },
+      {
+        $set: {
+          name,
+          email,
+          password,
+          address,
+          phone,
+          Image: Image_,
+        },
+      },
+      { new: true,multi:true}
+    );
+    token = setUser(user);
+  } catch (error) {
+    // console.log(error);
+    
+    return res.status(500).json({ message: 'Failed to update user' });
+  }
 
-
+  return res.status(201).json({ token });
+}
 
 module.exports = {
   handleUserSignup,
   handleUserLogin,
   handleUsercart,
   upload_pic,
-  handleUsercart_user
-
+  handleUpdateProfile,
+handleUsercart_user
 };
