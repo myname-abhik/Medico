@@ -1,7 +1,9 @@
 const User = require("../models/user");
+const product_Schema = require("../models/Product_Schema");
 const { v4: uuidv4 } = require("uuid");
 const { setUser } = require("../service/auth");
 const cloudinary = require('cloudinary').v2;
+
 
 async function handleUserSignup(req, res) {
   const { name, email, password } = req.body;
@@ -70,12 +72,29 @@ async function upload_pic(req,res){
 
  }
 
+ async function handleUsercart_user(req, res) {
+  const  user_Id  = req.params.id;
+  console.log(user_Id)
+  
+  const result = await User.findOne({  _id: user_Id });    
+  if (result && result.Product_Cart) {
+      const productIds = result.Product_Cart.map(item => item.Product_Id);
+      // res.send(productIds);
+      const product = await product_Schema.find({ _id: { $in: productIds.map(id => id) } })
+      res.send(product);
+  }
+  
+  
+  
+}
+
 
 
 module.exports = {
   handleUserSignup,
   handleUserLogin,
   handleUsercart,
-  upload_pic
+  upload_pic,
+  handleUsercart_user
 
 };
