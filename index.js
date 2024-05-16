@@ -22,8 +22,9 @@ const user = require('./routes/user');
 // MongoDB connection
 const { connectToMongoDB } = require('./connect');
 connectToMongoDB();
-const {connectToCloudinary} = require('./cloudinaryconnect')
 
+// Cloudinary connection
+const {connectToCloudinary} = require('./cloudinaryconnect')
 connectToCloudinary();
 
 

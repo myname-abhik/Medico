@@ -14,16 +14,24 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    address: {
+        type: String,
+        // required: true,
+    },
+    phone: {
+        type: String,
+        
+    },
 
     Product_Cart: [
         { 
             Product_Id: {
             type: String,
-            required: true,
+            // required: true,
         }, 
         status: {
             type: String,
-            required: true,
+            // required: true,
         } 
     }
        
