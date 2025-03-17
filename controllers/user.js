@@ -54,7 +54,7 @@ async function upload_pic(req,res){
   const id = req.body.id
   const file = req.files.file
   console.log(id,);
-  res.send(id);
+  
   cloudinary.uploader.upload(file.tempFilePath,async(error, result)=>{
      console.log(typeof(result.secure_url))
      User.findOneAndUpdate(
@@ -73,7 +73,7 @@ async function upload_pic(req,res){
          console.error('Error updating user image:', error);
      });
   })
-
+  res.send(id);
  }
 
  async function handleUsercart_user(req, res) {
